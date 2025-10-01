@@ -1,97 +1,106 @@
-# 🏍️ Projeto Pátio de Motos - Visão Computacional
+# 🚀 Projeto Pátio de Motos - Visão Computacional
 
-## 📖 Descrição do Projeto
-Este projeto tem como objetivo **monitorar motocicletas em tempo real** em um pátio, utilizando **Visão Computacional**.  
-A solução integra **YOLOv8 (Ultralytics)** para detecção de objetos, **OpenCV** para processamento de vídeo e **Streamlit** para visualização dos dados em dashboard interativo.  
-
-Os dados coletados (quantidade de motos, confiança das detecções e timestamp) são armazenados em um banco **SQLite**, permitindo análises quantitativas e qualitativas.
+Este projeto faz parte da Sprint 3 do Challenge e tem como objetivo **detectar motocicletas em um pátio** utilizando técnicas de **Visão Computacional**.  
+A solução foi implementada com o modelo **YOLOv8 (Ultralytics)**, capaz de identificar motos em **tempo real via webcam** ou a partir de **imagens/vídeos de teste**.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
-- **Python 3.10+**
-- [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics)
-- [OpenCV](https://opencv.org/)
-- [Streamlit](https://streamlit.io/)
-- [SQLite3](https://www.sqlite.org/index.html)
-- Pandas & SQLAlchemy
+## 📌 Estrutura do Projeto
 
----
-
-## 🚀 Como Rodar o Projeto
-
-### 1. Clonar o repositório
-```bash
-git clone https://github.com/seu-usuario/sp3-ia.git
-cd sp3-ia
+```
+projeto-patio-motos/
+│── data/               # pasta para armazenar vídeos ou imagens de teste
+│── models/             # pasta para salvar modelo YOLO treinado ou pré-treinado
+│── src/
+│   ├── main.py         # script principal (roda detecção em vídeo ou webcam)
+│   ├── detector.py     # classe para carregar e rodar o modelo YOLO
+│   └── utils.py        # funções auxiliares (FPS, métricas, etc.)
+│── requirements.txt    # dependências do projeto
+│── README.md           # documentação
 ```
 
-### 2. Criar ambiente virtual (recomendado)
+---
+
+## ⚙️ Tecnologias Utilizadas
+
+- [Python 3.9+](https://www.python.org/)  
+- [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics) → modelo pré-treinado em COCO  
+- [OpenCV](https://opencv.org/) → captura e exibição de imagens/vídeos  
+- [Matplotlib](https://matplotlib.org/) → visualização (opcional para gráficos de métricas)  
+
+---
+
+## 🚀 Como Executar
+
+### 1️⃣ Clonar o Repositório
+```bash
+git clone https://github.com/SEU_USUARIO/projeto-patio-motos.git
+cd projeto-patio-motos
+```
+
+### 2️⃣ Criar Ambiente Virtual (recomendado)
 ```bash
 python -m venv .venv
-.\.venv\Scriptsctivate   # Windows
-source .venv/bin/activate  # Linux/Mac
+.venv\Scripts\activate   # Windows
 ```
 
-### 3. Instalar dependências
+### 3️⃣ Instalar Dependências
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Baixar modelo YOLO pré-treinado
-O YOLOv8n (nano) será baixado automaticamente na primeira execução:
-```python
-from ultralytics import YOLO
-YOLO("yolov8n.pt")
+### 4️⃣ Baixar Modelo YOLOv8 (Nano - Leve)
+```bash
+python -c "from ultralytics import YOLO; YOLO('yolov8n.pt')"
 ```
 
-### 5. Rodar detecção em tempo real
-Usando webcam:
+### 5️⃣ Executar a Detecção
+- Usando **webcam**:
 ```bash
 python src/main.py
 ```
 
-Ou usando vídeo de teste:
-```bash
-python src/main.py data/video.mp4
+- Usando **vídeo**:
+No `main.py`, troque:
+```python
+cap = cv2.VideoCapture(0)
+```
+por:
+```python
+cap = cv2.VideoCapture("data/motos.mp4")
 ```
 
-> Aperte `q` para encerrar o vídeo.
-
-### 6. Rodar o dashboard
-```bash
-streamlit run src/dashboard.py
+- Usando **imagem estática** (teste):
+```python
+python src/test_image.py
 ```
-
-O dashboard abrirá no navegador em [http://localhost:8501](http://localhost:8501).
 
 ---
 
-## 📊 Funcionalidades e Métricas
-- ✅ Detecção de **múltiplas motos** em tempo real.  
-- ✅ Exibição de **bounding boxes** com confiança da predição.  
-- ✅ Armazenamento em banco SQLite:
-  - Timestamp de cada detecção.  
-  - Quantidade de motos por frame.  
-  - Confiança média das predições.  
-- ✅ Dashboard interativo com:
-  - Últimos registros salvos.  
-  - Gráfico histórico de quantidade de motos detectadas.  
+## 📊 Resultados Parciais
+
+- **Detecção em tempo real:** o modelo YOLOv8n conseguiu identificar motocicletas com boa precisão.  
+- **FPS médio:** ~10-15 fps em CPU (varia conforme o hardware).  
+- **Métricas qualitativas:** caixas delimitadoras são desenhadas em torno das motos com a **confiança da predição**.  
+- **Escalabilidade:** pode ser expandido para contagem de veículos, integração com banco de dados ou monitoramento em tempo real de pátios.  
+
+Exemplo de saída (ilustrativo):  
+
+![Exemplo de detecção](https://github.com/ultralytics/assets/raw/main/im/detect.jpg)
 
 ---
 
-## 📂 Estrutura do Projeto
-```
-sp3-ia/
-├── src/
-│   ├── main.py           # Script principal
-│   ├── moto_detector.py  # Classe YOLO para detecção
-│   ├── persistencia.py   # Persistência no SQLite
-│   ├── dashboard.py      # Dashboard Streamlit
-├── database/             # Banco SQLite gerado automaticamente
-├── data/                 # Vídeos de teste
-├── requirements.txt      # Dependências
-```
+## 🔗 Repositório no GitHub
+
+👉 [Clique aqui para acessar o repositório](https://github.com/SEU_USUARIO/projeto-patio-motos)
+
+---
+
+## ✨ Próximos Passos
+
+- Adicionar **armazenamento de logs** das detecções (JSON/CSV/BD).  
+- Criar **dashboard** com histórico de entradas e saídas.  
+- Implementar **alertas automáticos** para irregularidades (ex: moto fora da vaga).  
 
 
 
